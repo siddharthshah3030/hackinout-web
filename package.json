@@ -13,7 +13,8 @@
     "mobx-react": "^5.4.3",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-router": "^4.3.1"
+    "react-router": "^4.3.1",
+    "react-select": "^3.0.8"
   },
   "scripts": {
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",

@@ -1,7 +1,58 @@
 import React, { Fragment } from "react";
+import Select from "react-select";
 import notFound from "../assets/images/404.svg";
 
-export default class NotFound extends React.Component {
+const groupStyles = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between"
+};
+
+const groupBadgeStyles = {
+  backgroundColor: "#EBECF0",
+  borderRadius: "2em",
+  color: "#172B4D",
+  display: "inline-block",
+  fontSize: 12,
+  fontWeight: "normal",
+  lineHeight: "1",
+  minWidth: 1,
+  padding: "0.16666666666667em 0.5em",
+  textAlign: "center"
+};
+
+export const imageOptions = [
+  { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
+  { value: "blue", label: "Blue", color: "#0052CC", isDisabled: true },
+  { value: "purple", label: "Purple", color: "#5243AA" },
+  { value: "red", label: "Red", color: "#FF5630", isFixed: true },
+  { value: "orange", label: "Orange", color: "#FF8B00" },
+  { value: "yellow", label: "Yellow", color: "#FFC400" },
+  { value: "green", label: "Green", color: "#36B37E" },
+  { value: "forest", label: "Forest", color: "#00875A" },
+  { value: "slate", label: "Slate", color: "#253858" },
+  { value: "silver", label: "Silver", color: "#666666" }
+];
+
+export const groupedOptions = [
+  {
+    label: "Images",
+    options: imageOptions
+  },
+  {
+    label: "Text",
+    options: imageOptions
+  }
+];
+
+const formatGroupLabel = data => (
+  <div style={groupStyles}>
+    <span>{data.label}</span>
+    <span style={groupBadgeStyles}>{data.options.length}</span>
+  </div>
+);
+
+export default class UploadModel extends React.Component {
   render() {
     return (
       <Fragment>
@@ -27,7 +78,11 @@ export default class NotFound extends React.Component {
                   className="col-12 col-lg-8 col-xl-8 offset-2 text-center align-self-center"
                   style={{ height: "100vh" }}
                 >
-                  <img src={notFound} height="300vh" alt="BG" />
+                  <Select
+                    defaultValue={imageOptions[1]}
+                    options={groupedOptions}
+                    formatGroupLabel={formatGroupLabel}
+                  />
                   <h1 className="display-3">Not Found</h1>
                   <p>
                     The resource you are looking for has either been moved to a

@@ -4,7 +4,7 @@ import Home from "../containers/Home";
 import NotFound from "../containers/NotFound";
 import StartScreen from "../containers/StartScreen";
 import HaveAModel from "../containers/HaveAModel";
-import UploadImgModel from "../containers/UploadImgModel";
+import UploadModel from "../containers/UploadModel";
 
 const MainRoutes = () => {
   return (
@@ -13,7 +13,7 @@ const MainRoutes = () => {
         <Route exact path="/" component={Home} />
         <Route exact path="/start" component={StartScreen} />
         <Route exact path="/start/have" component={HaveAModel} />
-        <Route exact path="/start/have/img" component={UploadImgModel} />
+        <Route exact path="/start/have/img" component={UploadModel} />
         <Route path="*" component={NotFound} />
       </Switch>
     </React.Fragment>
