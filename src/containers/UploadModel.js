@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import Select from "react-select";
-import notFound from "../assets/images/404.svg";
+import CreatableSelect from "react-select/creatable";
+import uploadImage from "../assets/images/upload.svg";
 
 const groupStyles = {
   display: "flex",
@@ -22,16 +23,14 @@ const groupBadgeStyles = {
 };
 
 export const imageOptions = [
-  { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
-  { value: "blue", label: "Blue", color: "#0052CC", isDisabled: true },
-  { value: "purple", label: "Purple", color: "#5243AA" },
-  { value: "red", label: "Red", color: "#FF5630", isFixed: true },
-  { value: "orange", label: "Orange", color: "#FF8B00" },
-  { value: "yellow", label: "Yellow", color: "#FFC400" },
-  { value: "green", label: "Green", color: "#36B37E" },
-  { value: "forest", label: "Forest", color: "#00875A" },
-  { value: "slate", label: "Slate", color: "#253858" },
-  { value: "silver", label: "Silver", color: "#666666" }
+  { value: "KER", label: "Keras", color: "#00B8D9" },
+  { value: "PYT", label: "PyTorch", color: "#0052CC" },
+  { value: "TFL", label: "Tensorflow", color: "#5243AA" }
+];
+
+export const textOptions = [
+  { value: "BRT", label: "Bert", color: "#00B8D9" },
+  { value: "EXL", label: "ExcelNet", color: "#0052CC" }
 ];
 
 export const groupedOptions = [
@@ -41,7 +40,7 @@ export const groupedOptions = [
   },
   {
     label: "Text",
-    options: imageOptions
+    options: textOptions
   }
 ];
 
@@ -53,6 +52,42 @@ const formatGroupLabel = data => (
 );
 
 export default class UploadModel extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      modelType: "",
+      model: "",
+      classes: []
+    };
+    this.onChange = this.onChange.bind(this);
+    this.selectModel = this.selectModel.bind(this);
+    this.addClass = this.addClass.bind(this);
+    this.uploadModel = this.uploadModel.bind(this);
+  }
+
+  async onChange(e) {
+    await this.setState({ modelType: e.value });
+  }
+
+  async selectModel(e) {
+    await this.setState({ model: e.target.value });
+  }
+
+  async addClass(e) {
+    let classes = [];
+    let i;
+    for (i in e) {
+      classes.push(e[i].value);
+    }
+    classes.sort();
+    this.setState({ classes: classes });
+  }
+
+  uploadModel(e) {
+    e.preventDefault();
+    console.log(this.state);
+  }
+
   render() {
     return (
       <Fragment>
@@ -78,23 +113,46 @@ export default class UploadModel extends React.Component {
                   className="col-12 col-lg-8 col-xl-8 offset-2 text-center align-self-center"
                   style={{ height: "100vh" }}
                 >
-                  <Select
-                    defaultValue={imageOptions[1]}
-                    options={groupedOptions}
-                    formatGroupLabel={formatGroupLabel}
-                  />
-                  <h1 className="display-3">Not Found</h1>
-                  <p>
-                    The resource you are looking for has either been moved to a
-                    new location or does not exist
-                  </p>
-                  <a
-                    className="btn btn-primary btn-lg action-button"
-                    role="button"
-                    href="/"
-                  >
-                    Home
-                  </a>
+                  <img src={uploadImage} height="300vh" alt="BG" />
+                  <h3>Upload Model</h3>
+                  <form type="POST" onSubmit={this.uploadModel}>
+                    <div className="row">
+                      <div className="col-6">
+                        <div className="input-group">
+                          <div className="input-group-prepend">
+                            <span className="input-group-text">
+                              Select Model
+                            </span>
+                          </div>
+                          <input
+                            className="form-control"
+                            type="file"
+                            name="model"
+                            onChange={this.selectModel}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-6">
+                        <Select
+                          defaultValue={imageOptions[1]}
+                          options={groupedOptions}
+                          formatGroupLabel={formatGroupLabel}
+                          name="modelType"
+                          onChange={this.onChange}
+                        />
+                      </div>
+                    </div>
+                    <br />
+                    <label>Add Classes</label>
+                    <CreatableSelect isMulti onChange={this.addClass} />
+                    <br />
+                    <button
+                      className="btn btn-primary btn-lg action-button"
+                      type="submit"
+                    >
+                      Submit
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>
