@@ -9645,19 +9645,6 @@ footer.footer .social-link:hover {
   width: 100%;
   height: auto;
 }
-.header-blue .iphone-mockup .screen {
-  position: absolute;
-  width: 88%;
-  height: 77%;
-  top: 12%;
-  border-radius: 2px;
-  left: 6%;
-  border: 1px solid #444;
-  overflow: hidden;
-  background: url(../../assets/img/screen-content-iphone-6.jpg?h=c28effd2089af0c816c76ff5f6c1dc39)
-    center;
-  background-size: cover;
-}
 .header-blue .iphone-mockup .screen:before {
   content: "";
   background-color: #fff;
@@ -9670,11 +9657,9 @@ footer.footer .social-link:hover {
   opacity: 0.2;
 }
 .select-hover:hover {
-  background-color: #0059ff;
+  background-color: #2194FF;
 }
 .header-dark {
-  background: url(../../assets/img/mountain_bg.jpg?h=dc0d6d1dab7307041d86e5cf6b1fcc2c)
-    #444;
   background-size: cover;
   padding-bottom: 80px;
 }
@@ -9805,4 +9790,14 @@ footer.footer .social-link:hover {
 }
 .header-dark .hero .embed-responsive iframe {
   background-color: #666;
+}
+
+/* .select-panel-link{
+  color: "#212529";
+  text-decoration: "none"
+} */
+
+.select-panel-link:hover{
+  color: "#fff";
+  text-decoration: "none"
 }
