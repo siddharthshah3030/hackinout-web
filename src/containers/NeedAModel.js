@@ -10,7 +10,7 @@ export default class HaveAModel extends Component {
             style={{ height: "100vh", paddingTop: "20vh" }}
           >
             <a
-              href="/start/have/img"
+              href="/start/need/img"
               style={{ color: "#212529", textDecoration: "none" }}
             >
               <i className="icon ion-images" style={{ fontSize: "200px" }}></i>
@@ -22,7 +22,7 @@ export default class HaveAModel extends Component {
             style={{ height: "100vh", paddingTop: "20vh" }}
           >
             <a
-              href="/start/have/txt"
+              href="/start/need/txt"
               style={{ color: "#212529", textDecoration: "none" }}
             >
               <i

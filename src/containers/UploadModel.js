@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import uploadImage from "../assets/images/upload.svg";
+import { uploadModel, submitModel } from "../utils/apis";
 
 const groupStyles = {
   display: "flex",
@@ -57,16 +58,26 @@ export default class UploadModel extends React.Component {
     this.state = {
       modelType: "",
       model: "",
-      classes: []
+      modelUploadResponse: {},
+      classes: [],
+      width: 224,
+      height: 224,
+      channels: 3
     };
     this.onChange = this.onChange.bind(this);
     this.selectModel = this.selectModel.bind(this);
     this.addClass = this.addClass.bind(this);
-    this.uploadModel = this.uploadModel.bind(this);
+    this.submitModel = this.submitModel.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.uploadModelFile = this.uploadModelFile.bind(this);
   }
 
   async onChange(e) {
     await this.setState({ modelType: e.value });
+  }
+
+  handleChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
   }
 
   async selectModel(e) {
@@ -80,11 +91,28 @@ export default class UploadModel extends React.Component {
       classes.push(e[i].value);
     }
     classes.sort();
-    this.setState({ classes: classes });
+    await this.setState({ classes: classes });
   }
 
-  uploadModel(e) {
+  async submitModel(e) {
     e.preventDefault();
+    await this.uploadModelFile();
+    let req = {};
+    req["classes"] = { classes: this.state.classes };
+    req["name"] = String(Date.now());
+    req["typemodel"] = this.state.modelType;
+    req["typeproject"] = "IMG";
+    req["width"] = this.state.width;
+    req["height"] = this.state.height;
+    req["channels"] = this.state.channels;
+    req["modelfile"] = [this.state.modelUploadResponse];
+    let res = await submitModel(req);
+    console.log(res);
+  }
+
+  async uploadModelFile() {
+    let res = await uploadModel(this.state.model);
+    await this.setState({ modelUploadResponse: res });
     console.log(this.state);
   }
 
@@ -115,7 +143,7 @@ export default class UploadModel extends React.Component {
                 >
                   <img src={uploadImage} height="300vh" alt="BG" />
                   <h3>Upload Model</h3>
-                  <form type="POST" onSubmit={this.uploadModel}>
+                  <form method="POST" onSubmit={this.submitModel}>
                     <div className="row">
                       <div className="col-6">
                         <div className="input-group">
@@ -144,6 +172,51 @@ export default class UploadModel extends React.Component {
                     <br />
                     <label>Add Classes</label>
                     <CreatableSelect isMulti onChange={this.addClass} />
+                    <br />
+                    <div className="row">
+                      <div className="col-4">
+                        <div className="input-group">
+                          <div className="input-group-prepend">
+                            <span className="input-group-text">Width</span>
+                          </div>
+                          <input
+                            className="form-control"
+                            type="number"
+                            name="width"
+                            defaultValue={this.state.width}
+                            onChange={this.handleChange}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-4">
+                        <div className="input-group">
+                          <div className="input-group-prepend">
+                            <span className="input-group-text">Height</span>
+                          </div>
+                          <input
+                            className="form-control"
+                            type="number"
+                            name="height"
+                            defaultValue={this.state.height}
+                            onChange={this.handleChange}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-4">
+                        <div className="input-group">
+                          <div className="input-group-prepend">
+                            <span className="input-group-text">Channels</span>
+                          </div>
+                          <input
+                            className="form-control"
+                            type="number"
+                            name="channels"
+                            defaultValue={this.state.channels}
+                            onChange={this.handleChange}
+                          />
+                        </div>
+                      </div>
+                    </div>
                     <br />
                     <button
                       className="btn btn-primary btn-lg action-button"

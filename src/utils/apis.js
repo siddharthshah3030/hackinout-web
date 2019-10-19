@@ -4,13 +4,22 @@ import { API_SERVER } from "../config/index";
 
 let data;
 
-function uploadModel(data) {
-  axios
-    .post(API_SERVER + "/upload/model", data, {
-      // receive two parameter endpoint url ,form data
+export const uploadModel = async function(data) {
+  let formData = new FormData();
+  formData.append("files", data);
+  return await axios
+    .post(API_SERVER + "/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
     })
     .then(res => {
-      // then print response status
-      console.log(res.statusText);
+      return res.data[0];
     });
-}
+};
+
+export const submitModel = async function(data) {
+  return await axios.post(API_SERVER + "/projects", data, {}).then(res => {
+    return res.data;
+  });
+};
