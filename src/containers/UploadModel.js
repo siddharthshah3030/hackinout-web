@@ -70,7 +70,7 @@ export default class UploadModel extends React.Component {
   }
 
   async selectModel(e) {
-    await this.setState({ model: e.target.value });
+    await this.setState({ model: e.target.files[0] });
   }
 
   async addClass(e) {
@@ -134,7 +134,6 @@ export default class UploadModel extends React.Component {
                       </div>
                       <div className="col-6">
                         <Select
-                          defaultValue={imageOptions[1]}
                           options={groupedOptions}
                           formatGroupLabel={formatGroupLabel}
                           name="modelType"
