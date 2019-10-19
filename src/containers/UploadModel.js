@@ -256,7 +256,7 @@ export default class UploadModel extends React.Component {
                     </form>
                   )}
                   <br />
-                  {this.state.projectId != "" && (
+                  {this.state.projectId !== "" && (
                     <button
                       className="btn btn-primary btn-lg action-button"
                       type="submit"
