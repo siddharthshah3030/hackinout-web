@@ -9,7 +9,7 @@ import store from "./stores";
 import * as serviceWorker from "./serviceWorker";
 
 // import "./styles/main.css";
-import "./styles/scss/black-dashboard-react.css";
+import "./styles/css/main.css";
 
 const browserHistory = createBrowserHistory();
 

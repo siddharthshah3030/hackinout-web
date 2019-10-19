@@ -1,7 +1,5 @@
 @charset "utf-8";
 
-@import "../../node_modules/bulma/sass/utilities/initial-variables";
-
 $primary: #ff7300;
 $info: #006d72;
 $family-primary: "Lato", serif;
@@ -93,5 +91,3 @@ h6 {
     opacity: 1;
   }
 }
-
-@import "../../node_modules/bulma/bulma";
