@@ -2,7 +2,15 @@ import React, { Fragment } from "react";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import uploadImage from "../assets/images/upload.svg";
-import { uploadModel, submitModel } from "../utils/apis";
+import { css } from "@emotion/core";
+import { uploadModel, submitModel, deployModel } from "../utils/apis";
+import { BarLoader } from "react-spinners";
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const groupStyles = {
   display: "flex",
@@ -62,7 +70,9 @@ export default class UploadModel extends React.Component {
       classes: [],
       width: 224,
       height: 224,
-      channels: 3
+      channels: 3,
+      projectId: "",
+      loading: false
     };
     this.onChange = this.onChange.bind(this);
     this.selectModel = this.selectModel.bind(this);
@@ -70,6 +80,7 @@ export default class UploadModel extends React.Component {
     this.submitModel = this.submitModel.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.uploadModelFile = this.uploadModelFile.bind(this);
+    this.deployProject = this.deployProject.bind(this);
   }
 
   async onChange(e) {
@@ -84,6 +95,13 @@ export default class UploadModel extends React.Component {
     await this.setState({ model: e.target.files[0] });
   }
 
+  async deployProject() {
+    this.setState({ loading: true });
+    let res = await deployModel(this.state.projectId);
+    console.log(res);
+    this.setState({ loading: false });
+  }
+
   async addClass(e) {
     let classes = [];
     let i;
@@ -96,6 +114,7 @@ export default class UploadModel extends React.Component {
 
   async submitModel(e) {
     e.preventDefault();
+    this.setState({ loading: true });
     await this.uploadModelFile();
     let req = {};
     req["classes"] = { classes: this.state.classes };
@@ -107,7 +126,8 @@ export default class UploadModel extends React.Component {
     req["channels"] = this.state.channels;
     req["modelfile"] = [this.state.modelUploadResponse];
     let res = await submitModel(req);
-    console.log(res);
+    await this.setState({ projectId: res._id });
+    this.setState({ loading: false });
   }
 
   async uploadModelFile() {
@@ -143,88 +163,108 @@ export default class UploadModel extends React.Component {
                 >
                   <img src={uploadImage} height="300vh" alt="BG" />
                   <h3>Upload Model</h3>
-                  <form method="POST" onSubmit={this.submitModel}>
-                    <div className="row">
-                      <div className="col-6">
-                        <div className="input-group">
-                          <div className="input-group-prepend">
-                            <span className="input-group-text">
-                              Select Model
-                            </span>
+                  <br />
+                  {this.state.loading ? (
+                    <BarLoader
+                      css={override}
+                      size={500}
+                      sizeUnit={"px"}
+                      loading={this.state.loading}
+                    />
+                  ) : (
+                    <form method="POST" onSubmit={this.submitModel}>
+                      <div className="row">
+                        <div className="col-6">
+                          <div className="input-group">
+                            <div className="input-group-prepend">
+                              <span className="input-group-text">
+                                Select Model
+                              </span>
+                            </div>
+                            <input
+                              className="form-control"
+                              type="file"
+                              name="model"
+                              onChange={this.selectModel}
+                            />
                           </div>
-                          <input
-                            className="form-control"
-                            type="file"
-                            name="model"
-                            onChange={this.selectModel}
+                        </div>
+                        <div className="col-6">
+                          <Select
+                            options={groupedOptions}
+                            formatGroupLabel={formatGroupLabel}
+                            name="modelType"
+                            onChange={this.onChange}
                           />
                         </div>
                       </div>
-                      <div className="col-6">
-                        <Select
-                          options={groupedOptions}
-                          formatGroupLabel={formatGroupLabel}
-                          name="modelType"
-                          onChange={this.onChange}
-                        />
-                      </div>
-                    </div>
-                    <br />
-                    <label>Add Classes</label>
-                    <CreatableSelect isMulti onChange={this.addClass} />
-                    <br />
-                    <div className="row">
-                      <div className="col-4">
-                        <div className="input-group">
-                          <div className="input-group-prepend">
-                            <span className="input-group-text">Width</span>
+                      <br />
+                      <label>Add Classes</label>
+                      <CreatableSelect isMulti onChange={this.addClass} />
+                      <br />
+                      <div className="row">
+                        <div className="col-4">
+                          <div className="input-group">
+                            <div className="input-group-prepend">
+                              <span className="input-group-text">Width</span>
+                            </div>
+                            <input
+                              className="form-control"
+                              type="number"
+                              name="width"
+                              defaultValue={this.state.width}
+                              onChange={this.handleChange}
+                            />
                           </div>
-                          <input
-                            className="form-control"
-                            type="number"
-                            name="width"
-                            defaultValue={this.state.width}
-                            onChange={this.handleChange}
-                          />
+                        </div>
+                        <div className="col-4">
+                          <div className="input-group">
+                            <div className="input-group-prepend">
+                              <span className="input-group-text">Height</span>
+                            </div>
+                            <input
+                              className="form-control"
+                              type="number"
+                              name="height"
+                              defaultValue={this.state.height}
+                              onChange={this.handleChange}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-4">
+                          <div className="input-group">
+                            <div className="input-group-prepend">
+                              <span className="input-group-text">Channels</span>
+                            </div>
+                            <input
+                              className="form-control"
+                              type="number"
+                              name="channels"
+                              defaultValue={this.state.channels}
+                              onChange={this.handleChange}
+                            />
+                          </div>
                         </div>
                       </div>
-                      <div className="col-4">
-                        <div className="input-group">
-                          <div className="input-group-prepend">
-                            <span className="input-group-text">Height</span>
-                          </div>
-                          <input
-                            className="form-control"
-                            type="number"
-                            name="height"
-                            defaultValue={this.state.height}
-                            onChange={this.handleChange}
-                          />
-                        </div>
-                      </div>
-                      <div className="col-4">
-                        <div className="input-group">
-                          <div className="input-group-prepend">
-                            <span className="input-group-text">Channels</span>
-                          </div>
-                          <input
-                            className="form-control"
-                            type="number"
-                            name="channels"
-                            defaultValue={this.state.channels}
-                            onChange={this.handleChange}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <br />
+                      <br />
+                      <button
+                        className="btn btn-primary btn-lg action-button"
+                        type="submit"
+                      >
+                        Submit
+                      </button>
+                    </form>
+                  )}
+                  <br />
+                  {this.state.projectId != "" && (
                     <button
                       className="btn btn-primary btn-lg action-button"
                       type="submit"
+                      onClick={this.deployProject}
                     >
-                      Submit
+                      Deploy
                     </button>
-                  </form>
+                  )}
                 </div>
               </div>
             </div>

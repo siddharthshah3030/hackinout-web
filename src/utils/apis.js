@@ -1,6 +1,6 @@
 import { get } from "./common";
 import axios from "axios";
-import { API_SERVER } from "../config/index";
+import { API_SERVER, DEPLOY_SERVER } from "../config/index";
 
 let data;
 
@@ -20,6 +20,12 @@ export const uploadModel = async function(data) {
 
 export const submitModel = async function(data) {
   return await axios.post(API_SERVER + "/projects", data, {}).then(res => {
+    return res.data;
+  });
+};
+
+export const deployModel = async function(data) {
+  return await axios.post(DEPLOY_SERVER + "/convert/" + data, {}).then(res => {
     return res.data;
   });
 };
