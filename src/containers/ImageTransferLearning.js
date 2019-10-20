@@ -66,7 +66,8 @@ export default class ImageTransferLearning extends Component {
       loading: false,
       classes: [],
       classesHtml: [],
-      classLen: 0
+      classLen: 0,
+      name: ""
     };
     this.addNewClass = this.addNewClass.bind(this);
     this.createNewClass = this.createNewClass.bind(this);
@@ -74,6 +75,11 @@ export default class ImageTransferLearning extends Component {
     this.deleteClass = this.deleteClass.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.selectImages = this.selectImages.bind(this);
+    this.onChangeHandle = this.onChangeHandle.bind(this);
+  }
+
+  onChangeHandle(e) {
+    this.setState({ [e.target.name]: e.target.value });
   }
 
   handleChange(e) {
@@ -91,20 +97,34 @@ export default class ImageTransferLearning extends Component {
   }
 
   async uploadClassFiles() {
+    this.setState({ loading: true });
     let classes = this.state.classes;
     let res;
     for (let idx in classes) {
+      console.log(idx);
       res = await uploadModel(classes[idx].media);
-      console.log(res);
+      classes[idx].data = res;
     }
-    // let res = await uploadModel(this.state.model);
-    // await this.setState({ modelUploadResponse: res });
-    // console.log(this.state);
+    await this.setState({ classes: classes });
   }
 
-  submitModelForm(e) {
-    e.preventDefault();
-    this.uploadClassFiles();
+  async submitModelForm() {
+    // e.preventDefault();
+    await this.uploadClassFiles();
+    let req = {};
+    req["classes"] = { classes: this.state.classes };
+    // req["classes"] = tempClasses;
+    req["name"] = this.state.name;
+    req["typemodel"] = this.state.modelType;
+    req["typeproject"] = "IMG";
+    req["width"] = this.state.width;
+    req["height"] = this.state.height;
+    req["channels"] = this.state.channels;
+    // req["modelfile"] = [this.state.modelUploadResponse];
+    let res = await submitModel(req);
+    await this.setState({ projectId: res._id });
+    this.setState({ loading: false });
+    console.log(this.state);
   }
 
   deleteClass(index) {
@@ -204,7 +224,8 @@ export default class ImageTransferLearning extends Component {
                       loading={this.state.loading}
                     />
                   ) : (
-                    <form method="POST" onSubmit={this.submitModelForm}>
+                    // <form method="POST" onSubmit={this.submitModelForm}>
+                    <div>
                       <div className="row">
                         <div className="col-6">
                           <Select
@@ -225,7 +246,7 @@ export default class ImageTransferLearning extends Component {
                               type="text"
                               name="name"
                               defaultValue={this.state.name}
-                              onChange={this.handleChange}
+                              onChange={this.onChangeHandle}
                             />
                           </div>
                         </div>
@@ -297,10 +318,12 @@ export default class ImageTransferLearning extends Component {
                       <button
                         className="btn btn-primary btn-lg action-button"
                         type="submit"
+                        onClick={this.submitModelForm}
                       >
                         Submit
                       </button>
-                    </form>
+                    </div>
+                    // </form>
                   )}
                   <br />
                   {this.state.projectId !== "" && (

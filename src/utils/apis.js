@@ -10,15 +10,19 @@ export const uploadModel = async function(data) {
     formData.append("files", data[idx]);
     console.log(data[idx]);
   }
-  return await axios
-    .post(API_SERVER + "/upload", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data"
-      }
-    })
-    .then(res => {
-      return res.data;
-    });
+  try {
+    return await axios
+      .post(API_SERVER + "/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      })
+      .then(res => {
+        return res.data;
+      });
+  } catch (error) {
+    return {};
+  }
 };
 
 export const submitModel = async function(data) {
