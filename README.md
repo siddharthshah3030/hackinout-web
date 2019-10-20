@@ -1,8 +1,11 @@
 # deployai.co
 
-AI for everyone without a single line of code
-automatically launch AI from start to production
+Imagine | Build | Deploy, quickstart your ML/AI project with even no or less coding knowledge. Right from Prototyping to Production and Scalling. We are team Shakti Shakti Shaktimaan.
 
+
+# hosted 
+  http://inout.deployai.co:3000
+  
 # instructions to start
   - git clone <URL>
   - yarn 
