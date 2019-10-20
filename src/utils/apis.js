@@ -29,3 +29,23 @@ export const deployModel = async function(data) {
     return res.data;
   });
 };
+
+export const submitImage = async function(id, data) {
+  return await axios
+    .post(DEPLOY_SERVER + "/inference/" + id, data, {})
+    .then(res => {
+      return res.data;
+    });
+};
+
+export const getProjects = async function() {
+  return await axios.get(API_SERVER + "/projects").then(res => {
+    return res.data;
+  });
+};
+
+export const getProject = async function(data) {
+  return await axios.get(API_SERVER + "/projects/" + data).then(res => {
+    return res.data;
+  });
+};

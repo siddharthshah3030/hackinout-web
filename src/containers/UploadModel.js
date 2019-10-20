@@ -72,7 +72,8 @@ export default class UploadModel extends React.Component {
       height: 224,
       channels: 3,
       projectId: "",
-      loading: false
+      loading: false,
+      name: ""
     };
     this.onChange = this.onChange.bind(this);
     this.selectModel = this.selectModel.bind(this);
@@ -175,22 +176,26 @@ export default class UploadModel extends React.Component {
                     <form method="POST" onSubmit={this.submitModel}>
                       <div className="row">
                         <div className="col-6">
-                          <div className="input-group">
-                            <div className="input-group-prepend">
-                              <span className="input-group-text">
-                                Select Model
-                              </span>
-                            </div>
+                          <div className="custom-file">
                             <input
-                              className="form-control"
                               type="file"
+                              className="custom-file-input"
                               name="model"
+                              id="validatedCustomFile"
                               onChange={this.selectModel}
+                              required
                             />
+                            <label
+                              className="custom-file-label"
+                              for="validatedCustomFile"
+                            >
+                              Select Model
+                            </label>
                           </div>
                         </div>
                         <div className="col-6">
                           <Select
+                            defaultValue={this.state.modelType}
                             options={groupedOptions}
                             formatGroupLabel={formatGroupLabel}
                             name="modelType"
@@ -199,8 +204,31 @@ export default class UploadModel extends React.Component {
                         </div>
                       </div>
                       <br />
-                      <label>Add Classes</label>
-                      <CreatableSelect isMulti onChange={this.addClass} />
+                      <div className="row">
+                        <div className="col-6">
+                          <label>Add Classes</label>
+                          <CreatableSelect
+                            isMulti
+                            onChange={this.addClass}
+                            options={this.state.classes}
+                          />
+                        </div>
+                        <div className="col-6">
+                          <label>Name of the Project</label>
+                          <div className="input-group">
+                            <div className="input-group-prepend">
+                              <span className="input-group-text">Name</span>
+                            </div>
+                            <input
+                              className="form-control"
+                              type="text"
+                              name="name"
+                              defaultValue={this.state.name}
+                              onChange={this.handleChange}
+                            />
+                          </div>
+                        </div>
+                      </div>
                       <br />
                       <div className="row">
                         <div className="col-4">
