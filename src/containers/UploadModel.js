@@ -135,7 +135,7 @@ export default class UploadModel extends React.Component {
 
   async uploadModelFile() {
     let res = await uploadModel([this.state.model]);
-    await this.setState({ modelUploadResponse: res });
+    await this.setState({ modelUploadResponse: res[0] });
     console.log(this.state);
   }
 
