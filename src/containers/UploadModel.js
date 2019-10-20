@@ -5,6 +5,7 @@ import uploadImage from "../assets/images/upload.svg";
 import { css } from "@emotion/core";
 import { uploadModel, submitModel, deployModel } from "../utils/apis";
 import { BarLoader } from "react-spinners";
+import Navbar from "../components/MinNavbar";
 
 const override = css`
   display: block;
@@ -119,7 +120,7 @@ export default class UploadModel extends React.Component {
     await this.uploadModelFile();
     let req = {};
     req["classes"] = { classes: this.state.classes };
-    req["name"] = String(Date.now());
+    req["name"] = this.state.name;
     req["typemodel"] = this.state.modelType;
     req["typeproject"] = "IMG";
     req["width"] = this.state.width;
@@ -142,17 +143,7 @@ export default class UploadModel extends React.Component {
       <Fragment>
         <section>
           <div style={{ backgroundColor: "#fff", height: "100vh" }}>
-            <nav className="navbar navbar-dark navbar-expand-md navigation-clean-search">
-              <div className="container">
-                <a className="navbar-brand text-primary" href="/none">
-                  DeployML
-                </a>
-                <button className="navbar-toggler" data-toggle="collapse">
-                  <span className="sr-only">Toggle navigation</span>
-                  <span className="navbar-toggler-icon"></span>
-                </button>
-              </div>
-            </nav>
+            <Navbar />
             <div className="container hero">
               <div
                 className="row"

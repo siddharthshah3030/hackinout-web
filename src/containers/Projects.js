@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import { getProjects } from "../utils/apis";
+import Navbar from "../components/MinNavbar";
 
 export default class Projects extends React.Component {
   constructor() {
@@ -19,17 +20,7 @@ export default class Projects extends React.Component {
       <Fragment>
         <section>
           <div style={{ backgroundColor: "#fff", height: "100vh" }}>
-            <nav className="navbar navbar-dark navbar-expand-md navigation-clean-search">
-              <div className="container">
-                <a className="navbar-brand text-primary" href="/none">
-                  DeployML
-                </a>
-                <button className="navbar-toggler" data-toggle="collapse">
-                  <span className="sr-only">Toggle navigation</span>
-                  <span className="navbar-toggler-icon"></span>
-                </button>
-              </div>
-            </nav>
+            <Navbar />
             <div className="container hero">
               <div className="row">
                 <div className="col-12 col-lg-8 col-xl-8 offset-2 text-center align-self-center">

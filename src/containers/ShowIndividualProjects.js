@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { BarLoader } from "react-spinners";
 import { css } from "@emotion/core";
+import Navbar from "../components/MinNavbar";
 import {
   getProject,
   uploadModel,
@@ -74,17 +75,7 @@ export default class ProjectDetails extends Component {
       <Fragment>
         <section>
           <div style={{ backgroundColor: "#fff", height: "100vh" }}>
-            <nav className="navbar navbar-dark navbar-expand-md navigation-clean-search">
-              <div className="container">
-                <a className="navbar-brand text-primary" href="/none">
-                  DeployML
-                </a>
-                <button className="navbar-toggler" data-toggle="collapse">
-                  <span className="sr-only">Toggle navigation</span>
-                  <span className="navbar-toggler-icon"></span>
-                </button>
-              </div>
-            </nav>
+            <Navbar />
             <div className="container hero">
               <div className="row">
                 <div className="col">
