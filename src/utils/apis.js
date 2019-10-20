@@ -6,7 +6,10 @@ let data;
 
 export const uploadModel = async function(data) {
   let formData = new FormData();
-  formData.append("files", data);
+  for (let idx in data) {
+    formData.append("files", data[idx]);
+    console.log(data[idx]);
+  }
   return await axios
     .post(API_SERVER + "/upload", formData, {
       headers: {
@@ -14,7 +17,7 @@ export const uploadModel = async function(data) {
       }
     })
     .then(res => {
-      return res.data[0];
+      return res.data;
     });
 };
 

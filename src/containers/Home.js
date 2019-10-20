@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from "react";
-import { inject, observer } from "mobx-react";
+// import { inject, observer } from "mobx-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import bgImage from "../assets/images/bg.png";
 
-@inject("store")
-@observer
+// @inject("store")
+// @observer
 export default class Home extends Component {
   render() {
     return (

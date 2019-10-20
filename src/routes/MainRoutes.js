@@ -5,9 +5,10 @@ import NotFound from "../containers/NotFound";
 import StartScreen from "../containers/StartScreen";
 import UploadModel from "../containers/UploadModel";
 import NeedAModel from "../containers/NeedAModel";
-import ShoeBuildModelOptions from "../containers/ShowBuildModelOptions";
+import ShowBuildModelOptions from "../containers/ShowBuildModelOptions";
 import Projects from "../containers/Projects";
 import IndividualProjects from "../containers/ShowIndividualProjects";
+import ImageTransferLearning from "../containers/ImageTransferLearning";
 
 const MainRoutes = () => {
   return (
@@ -19,8 +20,13 @@ const MainRoutes = () => {
         <Route exact path="/projects/:id" component={IndividualProjects} />
         <Route exact path="/start/have" component={UploadModel} />
         <Route exact path="/start/need" component={NeedAModel} />
-        <Route exact path="/start/need/img" component={ShoeBuildModelOptions} />
-        <Route exact path="/start/need/txt" component={ShoeBuildModelOptions} />
+        <Route exact path="/start/need/img" component={ShowBuildModelOptions} />
+        <Route
+          exact
+          path="/start/need/transfer"
+          component={ImageTransferLearning}
+        />
+        <Route exact path="/start/need/txt" component={ShowBuildModelOptions} />
         <Route path="*" component={NotFound} />
       </Switch>
     </React.Fragment>

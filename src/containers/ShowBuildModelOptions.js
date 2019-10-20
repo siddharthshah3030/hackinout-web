@@ -49,14 +49,14 @@ export default class ShowBuildModelOptions extends Component {
             style={{ height: "100vh", paddingTop: "20vh" }}
           >
             <a
-              href="/start/need/img"
+              href="/start/need/transfer"
               style={{ color: "#212529", textDecoration: "none" }}
             >
               <i
                 className="icon ion-android-options"
                 style={{ fontSize: "200px" }}
               ></i>
-              <h1>Use Tranfer Learning</h1>
+              <h1>Use Transfer Learning</h1>
             </a>
           </div>
           <div

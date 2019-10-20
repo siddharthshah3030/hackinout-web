@@ -1,11 +1,9 @@
-import React, { Fragment } from "react";
-import Select from "react-select";
-import CreatableSelect from "react-select/creatable";
-import uploadImage from "../assets/images/upload.svg";
+import React, { Component, Fragment } from "react";
+import Navbar from "../components/MinNavbar";
 import { css } from "@emotion/core";
 import { BarLoader } from "react-spinners";
 import { uploadModel, submitModel, deployModel } from "../utils/apis";
-import Navbar from "../components/MinNavbar";
+import Select from "react-select";
 
 const override = css`
   display: block;
@@ -61,81 +59,123 @@ const formatGroupLabel = data => (
   </div>
 );
 
-export default class UploadModel extends React.Component {
+export default class ImageTransferLearning extends Component {
   constructor() {
     super();
     this.state = {
-      modelType: "",
-      model: "",
-      modelUploadResponse: {},
-      classes: [],
-      width: 224,
-      height: 224,
-      channels: 3,
-      projectId: "",
       loading: false,
-      name: ""
+      classes: [],
+      classesHtml: [],
+      classLen: 0
     };
-    this.onChange = this.onChange.bind(this);
-    this.selectModel = this.selectModel.bind(this);
-    this.addClass = this.addClass.bind(this);
-    this.submitModel = this.submitModel.bind(this);
+    this.addNewClass = this.addNewClass.bind(this);
+    this.createNewClass = this.createNewClass.bind(this);
+    this.submitModelForm = this.submitModelForm.bind(this);
+    this.deleteClass = this.deleteClass.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.uploadModelFile = this.uploadModelFile.bind(this);
-    this.deployProject = this.deployProject.bind(this);
-  }
-
-  async onChange(e) {
-    await this.setState({ modelType: e.value });
+    this.selectImages = this.selectImages.bind(this);
   }
 
   handleChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
+    let classes = this.state.classes;
+    let num = e.target.name.substr(-1);
+    let _class = {};
+    _class["name"] = e.target.value;
+    _class["media"] = {};
+    classes[num] = _class;
+    this.setState({ classes: classes });
   }
 
-  async selectModel(e) {
-    await this.setState({ model: e.target.files[0] });
+  componentDidMount() {
+    this.createNewClass();
   }
 
-  async deployProject() {
-    this.setState({ loading: true });
-    let res = await deployModel(this.state.projectId);
-    console.log(res);
-    this.setState({ loading: false });
-  }
-
-  async addClass(e) {
-    let classes = [];
-    let i;
-    for (i in e) {
-      classes.push(e[i].value);
+  async uploadClassFiles() {
+    let classes = this.state.classes;
+    let res;
+    for (let idx in classes) {
+      res = await uploadModel(classes[idx].media);
+      console.log(res);
     }
-    classes.sort();
-    await this.setState({ classes: classes });
+    // let res = await uploadModel(this.state.model);
+    // await this.setState({ modelUploadResponse: res });
+    // console.log(this.state);
   }
 
-  async submitModel(e) {
+  submitModelForm(e) {
     e.preventDefault();
-    this.setState({ loading: true });
-    await this.uploadModelFile();
-    let req = {};
-    req["classes"] = { classes: this.state.classes };
-    // req["classes"] = tempClasses;
-    req["name"] = this.state.name;
-    req["typemodel"] = this.state.modelType;
-    req["typeproject"] = "IMG";
-    req["width"] = this.state.width;
-    req["height"] = this.state.height;
-    req["channels"] = this.state.channels;
-    req["modelfile"] = [this.state.modelUploadResponse];
-    let res = await submitModel(req);
-    await this.setState({ projectId: res._id });
-    this.setState({ loading: false });
+    this.uploadClassFiles();
   }
 
-  async uploadModelFile() {
-    let res = await uploadModel([this.state.model]);
-    await this.setState({ modelUploadResponse: res });
+  deleteClass(index) {
+    console.log(index);
+    let classes = this.state.classesHtml;
+    classes.splice(index, 1);
+    this.setState({ classesHtml: classes });
+  }
+
+  async createNewClass() {
+    // e.preventDefault();
+    let index = this.state.classLen;
+    let ele = this.state.classesHtml;
+    let element = index => (
+      <div className="col-4" key={index}>
+        <div className="card">
+          <div className="card-header">
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text">Class</span>
+              </div>
+              <input
+                className="form-control"
+                name={"text_" + index}
+                type="text"
+                onChange={this.handleChange}
+              />
+            </div>
+          </div>
+          <div className="card-body">
+            <div className="custom-file">
+              <input
+                type="file"
+                multiple
+                className="custom-file-input"
+                name={"images_" + index}
+                id="validatedCustomFile"
+                onChange={this.selectImages}
+              />
+              <label className="custom-file-label" for="validatedCustomFile">
+                Upload Images
+              </label>
+            </div>
+            <br />
+            <br />
+            {/* <button
+              className="btn btn-outline-primary"
+              onClick={this.deleteClass}
+            >
+              Delete This
+            </button> */}
+          </div>
+        </div>
+      </div>
+    );
+    ele.push(element(index));
+    await this.setState({ classesHtml: ele });
+    await this.setState({ classLen: this.state.classLen + 1 });
+  }
+
+  selectImages(e) {
+    let num = e.target.name.substr(-1);
+    let classes = this.state.classes;
+    let _class = {};
+    _class["name"] = classes[num].name;
+    _class["media"] = e.target.files;
+    classes[num] = _class;
+    this.setState({ classes: classes });
+  }
+
+  addNewClass() {
     console.log(this.state);
   }
 
@@ -154,8 +194,7 @@ export default class UploadModel extends React.Component {
                   className="col-12 col-lg-8 col-xl-8 offset-2 text-center align-self-center"
                   style={{ height: "100vh" }}
                 >
-                  <img src={uploadImage} height="300vh" alt="BG" />
-                  <h3>Upload Model</h3>
+                  <h3>Create a new Model</h3>
                   <br />
                   {this.state.loading ? (
                     <BarLoader
@@ -165,26 +204,8 @@ export default class UploadModel extends React.Component {
                       loading={this.state.loading}
                     />
                   ) : (
-                    <form method="POST" onSubmit={this.submitModel}>
+                    <form method="POST" onSubmit={this.submitModelForm}>
                       <div className="row">
-                        <div className="col-6">
-                          <div className="custom-file">
-                            <input
-                              type="file"
-                              className="custom-file-input"
-                              name="model"
-                              id="validatedCustomFile"
-                              onChange={this.selectModel}
-                              required
-                            />
-                            <label
-                              className="custom-file-label"
-                              for="validatedCustomFile"
-                            >
-                              Select Model
-                            </label>
-                          </div>
-                        </div>
                         <div className="col-6">
                           <Select
                             defaultValue={this.state.modelType}
@@ -194,20 +215,7 @@ export default class UploadModel extends React.Component {
                             onChange={this.onChange}
                           />
                         </div>
-                      </div>
-                      <br />
-                      <div className="row">
                         <div className="col-6">
-                          <label>Add Classes</label>
-                          <CreatableSelect
-                            isMulti
-                            onChange={this.addClass}
-                            options={this.state.classes}
-                            delimiter={","}
-                          />
-                        </div>
-                        <div className="col-6">
-                          <label>Name of the Project</label>
                           <div className="input-group">
                             <div className="input-group-prepend">
                               <span className="input-group-text">Name</span>
@@ -219,6 +227,24 @@ export default class UploadModel extends React.Component {
                               defaultValue={this.state.name}
                               onChange={this.handleChange}
                             />
+                          </div>
+                        </div>
+                      </div>
+                      <br />
+                      <div className="row" id="class_row">
+                        {this.state.classesHtml.map(function(val, idx) {
+                          return val;
+                        })}
+                        <div className="col-4">
+                          <div className="card">
+                            <div className="card-body">
+                              <button
+                                className="btn btn-outline-primary"
+                                onClick={this.createNewClass}
+                              >
+                                Add a new class
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>

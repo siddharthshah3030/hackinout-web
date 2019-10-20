@@ -5,7 +5,7 @@ import createBrowserHistory from "history/createBrowserHistory";
 import { Provider } from "mobx-react";
 import ScrollToTop from "./utils/scroll";
 import MainRoutes from "./routes/MainRoutes";
-import store from "./stores";
+// import store from "./stores";
 import * as serviceWorker from "./serviceWorker";
 
 import "./assets/styles/main.css";
@@ -16,7 +16,7 @@ const browserHistory = createBrowserHistory();
 class App extends Component {
   render() {
     return (
-      <Provider store={store}>
+      <Provider>
         <Router history={browserHistory}>
           <ScrollToTop>
             <MainRoutes />
