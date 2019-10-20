@@ -84,14 +84,15 @@ export default class ProjectDetails extends Component {
                       <h1 className="display-3">
                         Project: {this.state.details.name}
                       </h1>
-                      {this.state.model.url !== "" && (
-                        <a
-                          href={this.state.model.url}
-                          className="btn btn-outline-primary"
-                        >
-                          Download Deployed Model
-                        </a>
-                      )}
+                      {this.state.model !== "" ||
+                        (this.state.model.url !== "" && (
+                          <a
+                            href={this.state.model.url}
+                            className="btn btn-outline-primary"
+                          >
+                            Download Deployed Model
+                          </a>
+                        ))}
                       {" | "}
                       <button
                         onClick={this.handleDeployModel}
