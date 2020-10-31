@@ -8,9 +8,9 @@ Imagine | Build | Deploy, quickstart your ML/AI project with even no or less cod
   (not deployed anywhere at the moment)  
 # instructions to start
   - git clone <URL>
-  - yarn 
+  - yarn (yarn recommended)
   - yarn start
   
 
 # requirements
-  - need google storage bucket credentials (json key) 
+  - need google storage bucket credentials (json key, create from GCP account) 
